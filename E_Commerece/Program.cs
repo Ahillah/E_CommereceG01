@@ -3,7 +3,9 @@
 using Domain.Contruct;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Persistance.Data; 
+using Persistance.Data;
+using Persistance.Repositories;
+using Service;
 
 namespace E_Commerece
 {
@@ -34,6 +36,8 @@ namespace E_Commerece
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(AssemblyReferences).Assembly);
             var app = builder.Build();
             await initilizeDbAsync(app);
 
