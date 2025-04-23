@@ -1,5 +1,6 @@
 
 
+using Abstraction;
 using Domain.Contruct;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,7 @@ namespace E_Commerece
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(AssemblyReferences).Assembly);
+            builder.Services.AddScoped<IServicesManager, ServiceManager>();
             var app = builder.Build();
             await initilizeDbAsync(app);
 
