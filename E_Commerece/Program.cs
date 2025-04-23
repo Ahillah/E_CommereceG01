@@ -58,6 +58,7 @@ namespace E_Commerece
 
 
             app.MapControllers();
+            app.UseStaticFiles();
 
             app.Run();
         }
