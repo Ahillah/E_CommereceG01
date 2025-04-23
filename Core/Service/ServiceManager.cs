@@ -14,4 +14,5 @@ namespace Service
     {
         private readonly Lazy<IProductServices> _LazyproductServices = new Lazy<IProductServices>(() => new ProductServices(unitOfWork, mapper));
         public IProductServices ProductServices => _LazyproductServices.Value;
+    }
 }
