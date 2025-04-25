@@ -12,7 +12,9 @@ namespace Domain.Contruct
        Task< IEnumerable<TEntity> >GetAllAsync();
 
         Task<TEntity> GetByIdAsync(TKey id);
+        Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> spec);
 
+        Task<TEntity> GetByIdAsync(ISpecifications<TEntity, TKey> spec);
         void Add(TEntity entity);
 
         void Update(TEntity entity);

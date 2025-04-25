@@ -19,5 +19,5 @@ namespace Service.MappingProfiles
             var url = $"{configuration.GetSection("Urls")["BaseUrl"]}/{source.PictureUrl}";
             return url;
         }
-    }
+    } 
 }

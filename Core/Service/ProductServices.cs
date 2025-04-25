@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Contruct;
 using Domain.Models.Products;
+using Service.Specifications;
 using Shared.Dto_s;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Service
         public async Task<IEnumerable<BrandDto>> GetAllBrandsAsync()
         {
            var Repository =unitOfWork.GetRepository<ProductBrand, int>();
+          
             var Brands = await Repository.GetAllAsync();
             var MappedBrands = mapper.Map<IEnumerable<ProductBrand>, IEnumerable<BrandDto>>(Brands);
             return MappedBrands;
@@ -24,7 +26,8 @@ namespace Service
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
             var Repository = unitOfWork.GetRepository<Product, int>();
-            var Products = await Repository.GetAllAsync();
+            var spec = new ProductWithBrandAndTypeSpec();
+            var Products = await Repository.GetAllAsync(spec);
             var MappedProducts = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(Products);
             return MappedProducts;
         }
