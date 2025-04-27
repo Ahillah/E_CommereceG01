@@ -10,7 +10,10 @@ namespace Service.Specifications
 {
     public class ProductWithBrandAndTypeSpec : BaseSpecifications<Product, int>
     {
-        public ProductWithBrandAndTypeSpec(ProductQueryParms QueryParam) : base(p=> (!QueryParam.BrandId.HasValue|| p.BrandId== QueryParam.BrandId) &&(!QueryParam.TypeId.HasValue||p.TypeId== QueryParam.TypeId))
+        public ProductWithBrandAndTypeSpec(ProductQueryParms QueryParam) : 
+            base(p=> (!QueryParam.BrandId.HasValue|| p.BrandId== QueryParam.BrandId) 
+            &&(!QueryParam.TypeId.HasValue||p.TypeId== QueryParam.TypeId)
+            &&(string.IsNullOrEmpty(QueryParam.SearchValue)||p.Name.ToLower().Contains(QueryParam.SearchValue.ToLower())))
         {
             AddInclude(p => p.Brand);
             AddInclude(p => p.Type);
