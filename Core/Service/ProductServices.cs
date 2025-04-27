@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Contruct;
 using Domain.Models.Products;
 using Service.Specifications;
+using Shared;
 using Shared.Dto_s;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,10 @@ namespace Service
             return MappedBrands;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? brandId , int? typeId)
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? brandId , int? typeId, ProductSortingOptions? sortingOptions)
         {
             var Repository = unitOfWork.GetRepository<Product, int>();
-            var spec = new ProductWithBrandAndTypeSpec( brandId , typeId);
+            var spec = new ProductWithBrandAndTypeSpec( brandId , typeId,sortingOptions);
             var Products = await Repository.GetAllAsync(spec);
             var MappedProducts = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(Products);
             return MappedProducts;
