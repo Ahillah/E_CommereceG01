@@ -26,6 +26,11 @@ namespace Persistance
             {
                 Query = spec.IncludeExpressions.Aggregate(Query,(Current, EXP) => Current.Include(EXP));
             }
+            if(spec.IsPaginated==true)
+            {
+
+                Query=Query.Skip(spec.Skip).Take(spec.Take);
+            }
             return Query;
         
         }

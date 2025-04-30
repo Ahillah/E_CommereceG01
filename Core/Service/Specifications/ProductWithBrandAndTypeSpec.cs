@@ -13,11 +13,11 @@ namespace Service.Specifications
         public ProductWithBrandAndTypeSpec(ProductQueryParms QueryParam) : 
             base(p=> (!QueryParam.BrandId.HasValue|| p.BrandId== QueryParam.BrandId) 
             &&(!QueryParam.TypeId.HasValue||p.TypeId== QueryParam.TypeId)
-            &&(string.IsNullOrEmpty(QueryParam.SearchValue)||p.Name.ToLower().Contains(QueryParam.SearchValue.ToLower())))
+            &&(string.IsNullOrEmpty(QueryParam.SearchValue )||p.Name.ToLower().Contains(QueryParam.SearchValue.ToLower())))
         {
             AddInclude(p => p.Brand);
             AddInclude(p => p.Type);
-
+            AddPagination(QueryParam.PageSize, QueryParam.pageIndex);
             switch(QueryParam.SortingOptions)
             {
                 case ProductSortingOptions.NameAsc:
