@@ -29,7 +29,9 @@ namespace Service
             var spec = new ProductWithBrandAndTypeSpec(QueryParam);
             var Products = await Repository.GetAllAsync(spec);
             var MappedProducts = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(Products);
-            return new PaginateResult<ProductDto>(QueryParam.pageIndex, Products.Count(),0,MappedProducts);
+            var CountSpec = new ProductCountSpecification(QueryParam);
+            var TotalCount = await Repository.GetCountAsync(CountSpec);
+            return new PaginateResult<ProductDto>(QueryParam.pageIndex, Products.Count(), TotalCount, MappedProducts);
             
         }
 
