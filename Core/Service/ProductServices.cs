@@ -25,7 +25,8 @@ namespace Service
         }
 
         public async Task<PaginateResult<ProductDto>> GetAllProductsAsync(ProductQueryParms QueryParam)
-        { var Repository = unitOfWork.GetRepository<Product, int>();
+        { var Repository = unitOfWork.GetRepository<Product, int>()
+                ;
             var spec = new ProductWithBrandAndTypeSpec(QueryParam);
             var Products = await Repository.GetAllAsync(spec);
             var MappedProducts = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(Products);

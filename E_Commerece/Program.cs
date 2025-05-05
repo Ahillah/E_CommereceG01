@@ -2,6 +2,7 @@
 
 using Abstraction;
 using Domain.Contruct;
+using E_Commerece.CustomMiddleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Data;
@@ -44,6 +45,7 @@ namespace E_Commerece
             await initilizeDbAsync(app);
 
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<CustomExceptionMiddleware>();
             if (app.Environment.IsDevelopment())
             {
                
