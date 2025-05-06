@@ -10,6 +10,7 @@ using Persistance.Data;
 using Persistance.Repositories;
 using Service;
 using Shared.ErrorModels;
+using StackExchange.Redis;
 
 namespace E_Commerece
 {
@@ -72,8 +73,13 @@ namespace E_Commerece
                     return new BadRequestObjectResult(Response);
                 };
             });
-        
-
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>((_) =>
+            {
+                return ConnectionMultiplexer.
+                Connect(builder.Configuration.GetConnectionString("RedisConnectionString"));
+                }
+            );
                 var app = builder.Build();
             await initilizeDbAsync(app);
 
