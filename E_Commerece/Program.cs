@@ -4,10 +4,12 @@ using Abstraction;
 using Domain.Contruct;
 using E_Commerece.CustomMiddleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistance.Data;
 using Persistance.Repositories;
 using Service;
+using Shared.ErrorModels;
 
 namespace E_Commerece
 {
@@ -22,26 +24,57 @@ namespace E_Commerece
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext < StoreDBContext>(
-                
-                options=>
+            builder.Services.AddDbContext<StoreDBContext>(
+
+                options =>
                 {
                     var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                     options.UseSqlServer(ConnectionString);
 
 
                 });
-                  
+
 
 
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(AssemblyReferences).Assembly);
             builder.Services.AddScoped<IServicesManager, ServiceManager>();
-            var app = builder.Build();
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+
+            {
+
+                options.InvalidModelStateResponseFactory = (context) =>
+
+                {
+
+                    var Errors = context.ModelState.Where(M => M.Value.Errors.Any())
+
+                    .Select(M => new ValidationError()
+
+                    {
+
+                        Field = M.Key,
+
+                        Errors = M.Value.Errors.Select(E => E.ErrorMessage)
+
+                    });
+
+                    var Response = new ValidationErrorToReturn()
+
+                    {
+                        Errors = Errors
+
+                    };
+                    return new BadRequestObjectResult(Response);
+                };
+            });
+        
+
+                var app = builder.Build();
             await initilizeDbAsync(app);
 
             // Configure the HTTP request pipeline.
